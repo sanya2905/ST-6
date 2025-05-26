@@ -16,13 +16,13 @@ public class AppTest {
     private Game game;
     private Player player;
     @BeforeEach
-    public void setUp() {
+    public void initializeGameAndPlayer() {
         game = new Game();
         player = new Player();
         player.symbol = 'X';
     }
     @Test
-    public void test1() {
+    public void initialGameStateShouldBeValid() {
         assertEquals(State.PLAYING, game.state);
         assertNotNull(game.board);
         assertEquals(9, game.board.length);
@@ -32,7 +32,7 @@ public class AppTest {
     }
 
     @Test
-    public void test2() {
+    public void defaultPlayerStateShouldBeCorrect() {
         Player p = new Player();
         assertEquals('\u0000', p.symbol);
         assertEquals(0, p.move);
@@ -41,14 +41,14 @@ public class AppTest {
     }
 
     @Test
-    public void test3() {
+    public void playingStateShouldBeDetectedCorrectly() {
         char[] b = {'X',' ',' ',' ',' ',' ',' ',' ',' '};
         game.symbol = 'X';
         assertEquals(State.PLAYING, game.checkState(b));
     }
 
     @Test
-    public void test4() {
+    public void drawShouldBeDetectedCorrectly() {
         char[] b = {'X','O','X','X','O','O','O','X','X'};
         game.symbol = 'X';
         assertEquals(State.DRAW, game.checkState(b));
@@ -57,35 +57,35 @@ public class AppTest {
     }
 
     @Test
-    public void test5() {
+    public void xWinShouldBeDetectedInRow() {
         char[] b = {'X','X','X',' ',' ',' ',' ',' ',' '};
         game.symbol = 'X';
         assertEquals(State.XWIN, game.checkState(b));
     }
 
     @Test
-    public void test6() {
+    public void oWinShouldBeDetectedInColumn() {
         char[] b = {'O',' ',' ','O',' ',' ','O',' ',' '};
         game.symbol = 'O';
         assertEquals(State.OWIN, game.checkState(b));
     }
 
     @Test
-    public void test7() {
+    public void xWinShouldBeDetectedInDiagonal() {
         char[] b = {'X',' ',' ',' ','X',' ',' ',' ','X'};
         game.symbol = 'X';
         assertEquals(State.XWIN, game.checkState(b));
     }
 
     @Test
-    public void test8() {
+    public void oWinShouldBeDetectedInDiagonal() {
         char[] b = {' ',' ','O',' ','O',' ','O',' ',' '};
         game.symbol = 'O';
         assertEquals(State.OWIN, game.checkState(b));
     }
 
     @Test
-    public void test9() {
+    public void generateMovesShouldReturnAllEmptyCells() {
         ArrayList<Integer> moves = new ArrayList<>();
         game.generateMoves(game.board, moves);
         assertEquals(9, moves.size());
@@ -93,7 +93,7 @@ public class AppTest {
     }
 
     @Test
-    public void test10() {
+    public void generateMovesShouldReturnCorrectList() {
         char[] b = {'X','O',' ',' ','X','O','X',' ',' '};
         ArrayList<Integer> moves = new ArrayList<>();
         game.generateMoves(b, moves);
@@ -105,14 +105,14 @@ public class AppTest {
     }
 
     @Test
-    public void test11() {
+    public void evaluationShouldReturnZeroForDraw() {
         char[] b = {'X','O','X','X','O','O','O','X','X'};
         player.symbol = 'X';
         assertEquals(0, game.evaluatePosition(b, player));
     }
 
     @Test
-    public void test12() {
+    public void evaluationShouldReturnPositiveInfinityForXWin() {
         char[] b = {'X','X','X',' ',' ',' ',' ',' ',' '};
         game.symbol = 'X';
         player.symbol = 'X';
@@ -120,7 +120,7 @@ public class AppTest {
     }
 
     @Test
-    public void test13() {
+    public void evaluationShouldReturnNegativeInfinityForEnemyWin() {
         char[] b = {'X','X','X',' ',' ',' ',' ',' ',' '};
         game.symbol = 'X';
         player.symbol = 'O';
@@ -128,7 +128,7 @@ public class AppTest {
     }
 
     @Test
-    public void test14() {
+    public void evaluationShouldReturnInfinityForOWin() {
         char[] b = {'O','O','O',' ',' ',' ',' ',' ',' '};
         game.symbol = 'O';
         player.symbol = 'O';
@@ -136,7 +136,7 @@ public class AppTest {
     }
 
     @Test
-    public void test15() {
+    public void evaluationShouldReturnMinusInfinityForOpponentWin() {
         char[] b = {'O','O','O',' ',' ',' ',' ',' ',' '};
         game.symbol = 'O';
         player.symbol = 'X';
@@ -144,7 +144,7 @@ public class AppTest {
     }
 
     @Test
-    public void test16() {
+    public void minMoveShouldReturnFiniteValue() {
         char[] b = {'X','O',' ',' ',' ',' ',' ',' ',' '};
         player.symbol = 'X';
         int v = game.MinMove(b, player);
@@ -152,7 +152,7 @@ public class AppTest {
     }
 
     @Test
-    public void test17() {
+    public void maxMoveShouldReturnFiniteValue() {
         char[] b = {'X','O',' ',' ',' ',' ',' ',' ',' '};
         player.symbol = 'X';
         int v = game.MaxMove(b, player);
@@ -160,26 +160,26 @@ public class AppTest {
     }
 
     @Test
-    public void test18() {
+    public void miniMaxShouldReturnValidMoveIndex() {
         player.symbol = 'X';
         int mv = game.MiniMax(game.board, player);
         assertTrue(mv >= 1 && mv <= 9);
     }
 
     @Test
-    public void test19() {
+    public void boardShouldPrintCorrectly() {
         char[] b = {'X','O',' ',' ',' ',' ',' ',' ',' '};
         Utility.print(b);
     }
 
     @Test
-    public void test20() {
-        int[] a = {6,2,4,1,8,6,7,5,9};
+    public void arrayShouldPrintCorrectly() {
+        int[] a = {6, 2, 4, 1, 8, 6, 7, 5, 9};
         Utility.print(a);
     }
 
     @Test
-    public void test21() {
+    public void listShouldPrintCorrectly() {
         ArrayList<Integer> L = new ArrayList<>();
         L.add(7);
         L.add(6);
@@ -187,7 +187,7 @@ public class AppTest {
     }
 
     @Test
-    public void test22() {
+    public void cellShouldStoreAndReturnCorrectValues() {
         TicTacToeCell c = new TicTacToeCell(8, 2, 1);
         assertEquals(8, c.getNum());
         assertEquals(2, c.getCol());
@@ -196,7 +196,7 @@ public class AppTest {
     }
 
     @Test
-    public void test23() {
+    public void cellShouldSetMarkerAndDisable() {
         TicTacToeCell c = new TicTacToeCell(0, 0, 0);
         c.setMarker("O");
         assertEquals('O', c.getMarker());
@@ -204,7 +204,7 @@ public class AppTest {
     }
 
     @Test
-    public void test24() {
+    public void panelShouldContainNineCells() {
         TicTacToePanel panel = new TicTacToePanel(new GridLayout(3,3));
         assertEquals(9, panel.getComponentCount());
         for (Component comp : panel.getComponents()) {
@@ -213,7 +213,7 @@ public class AppTest {
     }
 
     @Test
-    public void test25() {
+    public void cellClickShouldSetMarker() {
         System.setProperty("java.awt.headless", "true");
         TicTacToePanel panel = new TicTacToePanel(new GridLayout(3,3));
         TicTacToeCell cell0 = (TicTacToeCell) panel.getComponent(0);
