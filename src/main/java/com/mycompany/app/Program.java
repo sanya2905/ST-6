@@ -36,7 +36,6 @@ class Game {
     public int q;
     public char[] board;
 
-
     public Game() {
         player1=new Player();
         player2=new Player();
